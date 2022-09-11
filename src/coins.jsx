@@ -30,9 +30,9 @@ const Coins = () => {
 
     const handleScroll = async () => {
         if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
-            setPage((prev) => {
-                return prev + 1
-            })
+            setTimeout(() => {
+                setPage((prev) => prev + 1)
+            }, 700);
             setLazyLoading(true)
         }
     }
