@@ -1,24 +1,47 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { useState, useEffect, Fragment } from 'react';
 import "./coins.css"
 
 const Coins = () => {
     const [data, setData] = useState([])
     const [search, setSearch] = useState('')
     const [Loading, setIsLoading] = useState(true)
+    const [lazyLoading, setLazyLoading] = useState(false)
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
-        const url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false"
 
-        axios.get(url, setIsLoading(false)).then((res) => {
-            setData(res.data)
-            console.log(res.data);
+        axios.get(
+            `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=12&page=${page}&sparkline=false`
+        ).then((res) => {
+            setData((prev) => {
+                return [...prev, ...res.data];
+            });
+            setIsLoading(false)
+            setLazyLoading(false)
+
         }).catch((err) => {
             console.log(err);
         })
 
-    }, []);
+    }, [page]);
 
+
+    const handleScroll = async () => {
+        if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
+            setPage((prev) => {
+                return prev + 1
+            })
+            setLazyLoading(true)
+        }
+    }
+    useEffect(() => {
+
+        window.addEventListener("scroll", handleScroll)
+        return () => window.removeEventListener("scroll", handleScroll)
+
+    }, [])
     return (
         <>
             <section className='container'>
@@ -37,11 +60,7 @@ const Coins = () => {
                         <h4>price</h4>
                         <h4>24h</h4>
                         <h4>24h volume</h4>
-                        {
-                            window.innerWidth > 800 ?
-                                <h4>Mkt Cap</h4>
-                                : ""
-                        }
+                        <h4 className='hide-mobile'>Mkt Cap</h4>
                     </div>
                 </div>
 
@@ -57,32 +76,42 @@ const Coins = () => {
                             return (
                                 d.name.toLowerCase().includes(search.toLowerCase())
                             )
-                        }).map((d) => {
+                        }).map((d, i) => {
                             return (
-                                <div className='box_coins' key={d.market_cap_rank}>
-                                    <div className='left-box-coins'>
-                                        <span>{d.market_cap_rank}</span>
-                                        <img src={d.image} />
-                                        <h4 className='name'>{d.name}</h4>
-                                        {
-                                            window.innerWidth > 800 ?
-                                                <span>{d.symbol}</span>
-                                                : ""
-                                        }
+                                <Link className='link' to={`coin/${d.id}`} key={i}>
+                                    <div className='box_coins' >
+                                        <div className='left-box-coins'>
+                                            <span>{d.market_cap_rank}</span>
+                                            <img src={d.image} />
+                                            <h4 className='name'>{d.name}</h4>
+                                            <span className='hide-mobile'>{d.symbol}</span>
+                                        </div>
+                                        <div className='right-box-coins'>
+                                            <h4>{d.current_price.toLocaleString()}</h4>
+                                            <h4 style={{ color: d.market_cap_change_percentage_24h < 0 ? "red" : "green" }}>{d.market_cap_change_percentage_24h.toFixed(1)}%</h4>
+
+                                            <h4>${d.total_volume.toLocaleString()}</h4>
+
+                                            <h4 className='hide-mobile' style={{ marginLeft: '.6rem' }}>
+                                                ${d.market_cap.toLocaleString()}
+                                            </h4>
+
+                                        </div>
                                     </div>
-                                    <div className='right-box-coins'>
-                                        <h4>{d.current_price.toLocaleString()}</h4>
-                                        <h4 style={{ color: d.market_cap_change_percentage_24h < 0 ? "red" : "green" }}>{d.market_cap_change_percentage_24h.toFixed(1)}%</h4>
-                                        <h4>${d.total_volume.toLocaleString()}</h4>
-                                        {
-                                            window.innerWidth > 800 ?
-                                                <h4 style={{ marginLeft: '.6rem' }}>${d.market_cap.toLocaleString()}</h4>
-                                                : ""
-                                        }
-                                    </div>
-                                </div>
+                                </Link>
                             )
                         })
+                }
+                {
+                    lazyLoading && (
+
+                        <div className="lazyLoading">
+                            <div></div>
+                            <div></div>
+                        </div>
+
+                    )
+
                 }
             </section>
         </>);

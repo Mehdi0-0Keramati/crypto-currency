@@ -2,6 +2,9 @@ body {
   background-color: #121212;
   color: white;
 }
+.link {
+  text-decoration: none;
+}
 .container {
   width: 100%;
   min-height: 100vh;
@@ -85,7 +88,10 @@ body {
   grid-template-columns: repeat(4, 1fr);
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
+  .hide-mobile {
+    display: none;
+  }
   .container {
     padding: 0.4rem;
     font-size: 0.7rem;
@@ -100,7 +106,7 @@ body {
     gap: 0.3rem;
   }
   .loading {
-    margin-top: 50%;
+    margin-top: 30% !important;
   }
 }
 
@@ -131,5 +137,53 @@ body {
   }
   to {
     transform: translateY(-50px) scaleX(1);
+  }
+}
+
+.lazyLoading {
+  display: block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 1rem auto;
+}
+.lazyLoading div {
+  position: absolute;
+  border: 4px solid rgb(34, 169, 231);
+  opacity: 1;
+  border-radius: 50%;
+  animation: lazyLoading 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+.lazyLoading div:nth-child(2) {
+  animation-delay: -0.5s;
+}
+@keyframes lazyLoading {
+  0% {
+    top: 36px;
+    left: 36px;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+  4.9% {
+    top: 36px;
+    left: 36px;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+  5% {
+    top: 36px;
+    left: 36px;
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    top: 0px;
+    left: 0px;
+    width: 72px;
+    height: 72px;
+    opacity: 0;
   }
 }
