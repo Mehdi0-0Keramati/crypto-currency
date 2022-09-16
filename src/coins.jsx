@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import "./coins.css"
+import Swal from 'sweetalert2';
 
 const Coins = () => {
     const [data, setData] = useState([])
@@ -9,6 +10,17 @@ const Coins = () => {
     const [Loading, setIsLoading] = useState(true)
     const [lazyLoading, setLazyLoading] = useState(false)
     const [page, setPage] = useState(1);
+
+    useEffect(() => {
+        if (navigator.onLine == false) {
+            Swal.fire({
+                title:"Connection Error",
+                text:"you're offline check your connection!!",
+                color:"skyblue",
+                icon:"info",
+            })
+        } 
+    }, [navigator.onLine]);
 
     useEffect(() => {
 
@@ -28,8 +40,8 @@ const Coins = () => {
     }, [page]);
 
 
-    const handleScroll = async () => {
-        if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
+    const handleScroll = (e) => {
+        if (window.innerHeight + e.target.documentElement.scrollTop + 1 >= e.target.documentElement.scrollHeight) {
             setTimeout(() => {
                 setPage((prev) => prev + 1)
             }, 700);

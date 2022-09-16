@@ -16,14 +16,14 @@
   top: 0.8rem;
   left: 2rem;
   font-size: 1rem;
-  background-color: gray;
+  background-color: rgba(10, 66, 131, 0.575);
   border-radius: 0.2rem;
-  color: darkblue;
+  color: rgb(11, 149, 212);
   padding: 0.2rem;
 }
 .container_coin .price {
   position: relative;
-  background: #161616;
+  background: #1E1E1E;
   color: darkgray;
   padding: 1.5rem;
   padding-top: 3rem;
@@ -43,7 +43,7 @@
   color: gainsboro;
 }
 .container_coin .changePrice {
-  background: #161616;
+  background: #1E1E1E;
   width: 100%;
   padding: 1rem;
   display: grid;
@@ -69,7 +69,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  background-color: #161616;
+  background-color: #1E1E1E;
   padding: 0.5rem;
   color: gray;
 }
@@ -85,7 +85,7 @@
 .container_coin .about {
   border-radius: 0 0 .6rem .6rem ;
   padding: 1rem;
-  background: #161616;
+  background: #1E1E1E;
   color: gray;
   text-align: justify;
   line-height: 1.3rem;
